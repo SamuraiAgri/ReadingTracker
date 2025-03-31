@@ -1,7 +1,5 @@
-// ファイル名: ReadingTracker/ViewModels/ReminderViewModel.swift
-
-import Foundation
-import Combine
+// ファイル名: ReadingTracker/Views/ReminderView.swift
+import SwiftUI
 import CoreData
 
 class ReminderViewModel: ObservableObject {

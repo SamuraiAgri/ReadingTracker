@@ -12,7 +12,7 @@ class BookModel {
     }
     
     func fetchBooks(withStatus status: AppConstants.ReadingStatus? = nil) -> [Book] {
-        let request: NSFetchRequest<Book> = Book.fetchRequest()
+        let request = Book.fetchRequest() as NSFetchRequest<Book>
         
         // ソート条件（デフォルトは追加日の新しい順）
         let sortDescriptor = NSSortDescriptor(key: "addedDate", ascending: false)
@@ -32,7 +32,7 @@ class BookModel {
     }
     
     func searchBooks(byText searchText: String) -> [Book] {
-        let request: NSFetchRequest<Book> = Book.fetchRequest()
+        let request = Book.fetchRequest() as NSFetchRequest<Book>
         
         // 検索条件（タイトルまたは著者名に部分一致）
         let predicate = NSPredicate(format: "title CONTAINS[cd] %@ OR author CONTAINS[cd] %@", searchText, searchText)
@@ -178,7 +178,7 @@ class BookModel {
     }
     
     func fetchReadingSessions(for book: Book) -> [ReadingSession] {
-        let request: NSFetchRequest<ReadingSession> = ReadingSession.fetchRequest()
+        let request = ReadingSession.fetchRequest() as NSFetchRequest<ReadingSession>
         request.predicate = NSPredicate(format: "book == %@", book)
         request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
         
@@ -191,7 +191,7 @@ class BookModel {
     }
     
     func fetchNotes(for book: Book) -> [Note] {
-        let request: NSFetchRequest<Note> = Note.fetchRequest()
+        let request = Note.fetchRequest() as NSFetchRequest<Note>
         request.predicate = NSPredicate(format: "book == %@", book)
         request.sortDescriptors = [NSSortDescriptor(key: "pageNumber", ascending: true)]
         
@@ -208,7 +208,7 @@ class BookModel {
         let calendar = Calendar.current
         let oneYearAgo = calendar.date(byAdding: .year, value: -1, to: Date()) ?? Date()
         
-        let request: NSFetchRequest<Book> = Book.fetchRequest()
+        let request = Book.fetchRequest() as NSFetchRequest<Book>
         request.predicate = NSPredicate(format: "status == %d AND finishDate >= %@",
                                        AppConstants.ReadingStatus.finished.rawValue, oneYearAgo as NSDate)
         
@@ -243,7 +243,7 @@ class BookModel {
         let calendar = Calendar.current
         let oneYearAgo = calendar.date(byAdding: .year, value: -1, to: Date()) ?? Date()
         
-        let request: NSFetchRequest<ReadingSession> = ReadingSession.fetchRequest()
+        let request = ReadingSession.fetchRequest() as NSFetchRequest<ReadingSession>
         request.predicate = NSPredicate(format: "date >= %@", oneYearAgo as NSDate)
         
         do {

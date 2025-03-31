@@ -1,8 +1,8 @@
 // ファイル名: ReadingTracker/ViewModels/BookListViewModel.swift
-
 import Foundation
 import Combine
 import CoreData
+import SwiftUI
 
 class BookListViewModel: ObservableObject {
     @Published var books: [Book] = []

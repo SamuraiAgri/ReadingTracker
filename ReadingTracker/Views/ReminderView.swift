@@ -1,5 +1,5 @@
 // ファイル名: ReadingTracker/Views/ReminderView.swift
-
+import CoreData
 import SwiftUI
 
 struct ReminderView: View {

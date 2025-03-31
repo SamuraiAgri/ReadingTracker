@@ -1,5 +1,5 @@
 // ファイル名: ReadingTracker/Views/StatisticsView.swift
-
+import CoreData
 import SwiftUI
 import Charts
 

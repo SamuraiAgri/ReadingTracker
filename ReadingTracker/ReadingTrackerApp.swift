@@ -1,19 +1,13 @@
-//
-//  ReadingTrackerApp.swift
-//  ReadingTracker
-//
-//  Created by rinka on 2025/03/31.
-//
-
+// ファイル名: ReadingTracker/ReadingTrackerApp.swift
 import SwiftUI
 
 @main
 struct ReadingTrackerApp: App {
     let persistenceController = PersistenceController.shared
-
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(viewContext: persistenceController.container.viewContext)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

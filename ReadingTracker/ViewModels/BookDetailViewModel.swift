@@ -1,8 +1,8 @@
 // ファイル名: ReadingTracker/ViewModels/BookDetailViewModel.swift
-
 import Foundation
 import Combine
 import CoreData
+import SwiftUI
 
 class BookDetailViewModel: ObservableObject {
     @Published var book: Book

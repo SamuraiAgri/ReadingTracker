@@ -1,9 +1,7 @@
-// ファイル名: ReadingTracker/ViewModels/StatisticsViewModel.swift
-
-import Foundation
-import Combine
-import CoreData
+// ファイル名: ReadingTracker/Views/StatisticsView.swift
 import SwiftUI
+import CoreData
+import Charts
 
 class StatisticsViewModel: ObservableObject {
     @Published var monthlyBookCount: [(month: Date, count: Int)] = []
