@@ -18,18 +18,13 @@ struct BookDetailView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                // ヘッダー部分（表紙・基本情報）
+                // ヘッダー部分（基本情報）
                 bookHeaderView
                 
                 Divider()
                 
-                // 読書進捗セクション
+                // 読書進捗セクション（読書記録機能を統合）
                 readingProgressSection
-                
-                Divider()
-                
-                // 読書セッションセクション
-                readingSessionsSection
                 
                 Divider()
                 
@@ -85,14 +80,7 @@ struct BookDetailView: View {
     
     private var bookHeaderView: some View {
         HStack(alignment: .top, spacing: 16) {
-            // 本の表紙
-            Image(viewModel.book.coverImageName ?? "default_book_cover")
-                .resizable()
-                .scaledToFill()
-                .frame(width: 100, height: 150)
-                .cornerRadius(8)
-                .shadow(radius: 4)
-            
+            // 本の基本情報
             VStack(alignment: .leading, spacing: 8) {
                 Text(viewModel.book.title ?? "不明なタイトル")
                     .font(AppConstants.Fonts.title)
@@ -146,17 +134,35 @@ struct BookDetailView: View {
                 
                 Spacer()
                 
-                Button(action: {
-                    showingProgressUpdateSheet = true
-                }) {
-                    Text("更新")
+                HStack {
+                    Button(action: {
+                        showingReadingSessionSheet = true
+                    }) {
+                        HStack {
+                            Image(systemName: "plus")
+                            Text("記録")
+                        }
                         .font(AppConstants.Fonts.caption)
-                        .padding(.horizontal, 12)
+                        .padding(.horizontal, 8)
                         .padding(.vertical, 6)
                         .background(
                             Capsule()
                                 .fill(Color.primary.opacity(0.1))
                         )
+                    }
+                    
+                    Button(action: {
+                        showingProgressUpdateSheet = true
+                    }) {
+                        Text("更新")
+                            .font(AppConstants.Fonts.caption)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 6)
+                            .background(
+                                Capsule()
+                                    .fill(Color.primary.opacity(0.1))
+                        )
+                    }
                 }
             }
             
@@ -186,49 +192,33 @@ struct BookDetailView: View {
                     .fontWeight(.bold)
             }
             .font(AppConstants.Fonts.caption)
+            
+            // 読書記録の表示
+            if !viewModel.readingSessions.isEmpty {
+                Text("読書記録")
+                    .font(AppConstants.Fonts.headline)
+                    .padding(.top, 12)
+                
+                ForEach(viewModel.readingSessions.prefix(3)) { session in
+                    ReadingSessionRow(session: session)
+                }
+                
+                if viewModel.readingSessions.count > 3 {
+                    Button(action: {
+                        // すべての読書記録を表示する詳細ビューへ
+                    }) {
+                        Text("すべての記録を表示")
+                            .font(AppConstants.Fonts.caption)
+                            .foregroundColor(.primary)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.vertical, 4)
+                    }
+                }
+            }
         }
         .padding()
         .background(Color(.systemGray6))
         .cornerRadius(12)
-    }
-    
-    private var readingSessionsSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("読書記録")
-                    .font(AppConstants.Fonts.headline)
-                
-                Spacer()
-                
-                Button(action: {
-                    showingReadingSessionSheet = true
-                }) {
-                    HStack {
-                        Image(systemName: "plus")
-                        Text("記録")
-                    }
-                    .font(AppConstants.Fonts.caption)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(
-                        Capsule()
-                            .fill(Color.primary.opacity(0.1))
-                    )
-                }
-            }
-            
-            if viewModel.readingSessions.isEmpty {
-                Text("読書記録がありません")
-                    .font(AppConstants.Fonts.caption)
-                    .foregroundColor(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding()
-            } else {
-                ForEach(viewModel.readingSessions) { session in
-                    ReadingSessionRow(session: session)
-                }
-            }
-        }
     }
     
     private var notesSection: some View {

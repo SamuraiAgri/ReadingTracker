@@ -32,8 +32,8 @@ struct BookListView: View {
                 }
             }
             .sheet(isPresented: $showingAddBookSheet) {
-                AddBookView(isPresented: $showingAddBookSheet, onAdd: { title, author, coverImageName, totalPages in
-                    viewModel.addBook(title: title, author: author, coverImageName: coverImageName, totalPages: totalPages)
+                AddBookView(isPresented: $showingAddBookSheet, onAdd: { title, author, totalPages in
+                    viewModel.addBook(title: title, author: author, coverImageName: "default_book_cover", totalPages: totalPages)
                 })
             }
             .onAppear {
@@ -186,14 +186,6 @@ struct BookRowView: View {
     
     var body: some View {
         HStack(spacing: 12) {
-            // 本の表紙イメージ
-            Image(book.coverImageName ?? "default_book_cover")
-                .resizable()
-                .scaledToFill()
-                .frame(width: 60, height: 85)
-                .cornerRadius(6)
-                .shadow(radius: 2)
-            
             VStack(alignment: .leading, spacing: 4) {
                 Text(book.title ?? "不明なタイトル")
                     .font(AppConstants.Fonts.headline)
@@ -247,16 +239,11 @@ struct StatusBadge: View {
 // 本の追加ビュー
 struct AddBookView: View {
     @Binding var isPresented: Bool
-    let onAdd: (String, String, String, Int) -> Void
+    let onAdd: (String, String, Int) -> Void
     
     @State private var title: String = ""
     @State private var author: String = ""
     @State private var totalPages: String = ""
-    @State private var selectedCoverImageName: String = "default_book_cover"
-    @State private var showingImagePicker = false
-    
-    // サンプルのカバー画像セット
-    let coverImages = ["book_cover_1", "book_cover_2", "book_cover_3", "book_cover_4", "book_cover_5", "default_book_cover"]
     
     var body: some View {
         NavigationView {
@@ -266,22 +253,6 @@ struct AddBookView: View {
                     TextField("著者", text: $author)
                     TextField("総ページ数", text: $totalPages)
                         .keyboardType(.numberPad)
-                }
-                
-                Section(header: Text("表紙画像")) {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 12) {
-                            ForEach(coverImages, id: \.self) { imageName in
-                                CoverImageOption(
-                                    imageName: imageName,
-                                    isSelected: selectedCoverImageName == imageName
-                                ) {
-                                    selectedCoverImageName = imageName
-                                }
-                            }
-                        }
-                        .padding(.vertical, 8)
-                    }
                 }
             }
             .navigationTitle("本を追加")
@@ -299,44 +270,12 @@ struct AddBookView: View {
                             return
                         }
                         
-                        onAdd(title, author, selectedCoverImageName, pages)
+                        onAdd(title, author, pages)
                         isPresented = false
                     }
                     .disabled(title.isEmpty || author.isEmpty || totalPages.isEmpty)
                 }
             }
         }
-    }
-}
-
-// 表紙画像オプションコンポーネント
-struct CoverImageOption: View {
-    let imageName: String
-    let isSelected: Bool
-    let onTap: () -> Void
-    
-    var body: some View {
-        Image(imageName)
-            .resizable()
-            .scaledToFill()
-            .frame(width: 80, height: 120)
-            .cornerRadius(8)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(isSelected ? Color.primary : Color.clear, lineWidth: 3)
-            )
-            .overlay(
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.title)
-                    .foregroundColor(.primary)
-                    .padding(6)
-                    .opacity(isSelected ? 1 : 0),
-                alignment: .bottomTrailing
-            )
-            .shadow(radius: 2)
-            .padding(4)
-            .onTapGesture {
-                onTap()
-            }
     }
 }
