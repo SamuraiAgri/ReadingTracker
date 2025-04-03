@@ -3,19 +3,20 @@
 import SwiftUI
 
 extension Color {
-    static let primary = Color("Primary")
-    static let secondary = Color("Secondary")
-    static let background = Color("Background")
-    static let accent = Color("Accent")
-    static let text = Color("TextColor")
-    static let textSecondary = Color("TextSecondary")
+    // 基本色を直接定義
+    static let primary = Color.blue
+    static let secondary = Color.purple
+    static let background = Color(.systemBackground)
+    static let accent = Color.orange
+    static let text = Color(.label)
+    static let textSecondary = Color(.secondaryLabel)
     
     // ステータス用の色
-    static let statusUnread = Color("StatusUnread")
-    static let statusReading = Color("StatusReading")
-    static let statusFinished = Color("StatusFinished")
+    static let statusUnread = Color.gray
+    static let statusReading = Color.blue
+    static let statusFinished = Color.green
     
     // グラフ表示用の色
-    static let chartPrimary = Color("ChartPrimary")
-    static let chartSecondary = Color("ChartSecondary")
+    static let chartPrimary = Color.blue
+    static let chartSecondary = Color.purple
 }
